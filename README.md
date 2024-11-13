@@ -84,3 +84,62 @@ import 'package:corner_store_mobile/menu.dart';
 12. I created an ItemCard class that displays each button. The button displays a message "You have pressed the [button name] button." in the snackbar.
 13. I added the InfoCard and ItemCard into the Widget build() section of the MyHomePage class in orer to have them display on the home page.
 14. I tested my app and then pushed it to github.
+
+# Assignment 8
+**What is the purpose of const in Flutter? Explain the advantages of using const in Flutter code. When should we use const, and when should it not be used?**
+In Flutter, const is used to define compile-time constants, meaning the values are determined at compile-time rather than runtime. This optimizes memory usage and hence improves performance by reusing instances of widgets and objects marked as const, rather than creating new instances each time. 
+We should use const whenever possible for widgets, styles, and values that are fixed and won’t change over the app's lifetime, such as static labels, colors, and layouts. However, we should avoid const when the value or widget needs to be dynamic or change in response to user interaction or state changes, as these will require rebuilding with new values. 
+
+**Explain and compare the usage of Column and Row in Flutter. Provide example implementations of each layout widget!**
+In Flutter, Column and Row are essential for building structured UIs and are commonly used to organize the placement of UI elements. Column arranges its children in a vertical (top-to-bottom) layout, whereas Row arranges its children in a horizontal (left-to-right) layout. 
+Here is an example of implementing Column:
+Column(
+  mainAxisAlignment: MainAxisAlignment.center,  // centers the children vertically
+  crossAxisAlignment: CrossAxisAlignment.start, // aligns children to the start horizontally
+  children: [
+    Text('Hello, World!'),
+    Text('Nice to meet you!'),
+  ],
+)
+Here is an example of implementing row:
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceAround,  //distributes space evenly around each child
+  crossAxisAlignment: CrossAxisAlignment.center,      // centers children vertically
+  children: [
+    Icon(Icons.home),
+    Icon(Icons.mood),
+    Icon(Icons.settings),
+  ],
+)
+
+**List the input elements you used on the form page in this assignment. Are there other Flutter input elements you didn’t use in this assignment? Explain!**
+Input elements used on the form page:
+- TextFormField: this is used for each input in the form (Name, Description, Amount, and Cost)
+- ElevatedButton: this button is used to submit the form and trigger the validation checks
+
+Input elements not used on the form page:
+- DropdownButtonFormField: used for selection from a fixed list of options, such as categories or item types, making it a good choice when inputs are limited to predefined choices
+- Checkbox / CheckboxListTile: useful for binary (true/false) inputs; for instance, it could be used to indicate product availability
+- Radio / RadioListTile: used for selecting one option from multiple choices, such as picking between product conditions (new or used)
+- Slider: rovides an interactive way to input a range value, which can be useful for quantities or prices within a defined range
+- Switch: used for toggling a setting on or off, such as marking a product as featured or active
+
+**How do you set the theme within a Flutter application to ensure consistency? Did you implement a theme in your application?**
+To set a consistent theme throughout a Flutter application, I defined it in the MaterialApp widget’s theme property as a ThemeData element. I specified a colorScheme to create a consistent colour scheme throughout my application.
+
+**How do you manage navigation in a multi-page Flutter application?**
+In a multi-page Flutter application, navigation can be managed using Navigator and Route classes. For simple navigation, Navigator.push() and Navigator.pop() add and remove pages from the stack, while named routes, defined in MaterialApp, make it easier to manage multiple pages in larger apps. Additionally, Drawer provides an easy way to switch between main sections.
+
+**Implementation of the Assignment**
+1. I created 2 new directories screens/ and widgets/ in lib/
+2. I moved menu.dart to lib/screens/ and updated the import statement in main.dart to reflect this
+3. I created a form for product entry named product_entry_form.dart under screens.
+4. I added 4 input fields into the form for product name, description, amount and cost.
+5. I added validation for each input field not to be empty and to match the correct datatype.
+6. I added a save button to the form
+7. I added a popup that displays the added data when the save button is clicked
+8. I added a navigation drawer lib/widgts/left_drawer.dart and created 2 navigational buttons in it, one for the homepage and one for the adding product form and i connected them
+9. I moved the ItemCard and ItemHomepage out of menu.dart to a new file lib/widgets/menu_button_cards.dart and added a navigation feature for the Add Product button to redirect to the product entry form
+10. I added an import for menu_button_cards.dart into menu.dart
+11. I added the left drawer into the menu.dart page
+12. I tested the application to ensure it worked as expected
