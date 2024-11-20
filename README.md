@@ -161,4 +161,20 @@ flutter pub add http
 9. I created a views.py function and  url endpoint in my django app for creating a product in flutter.
 10. I connected the flutter product entry to CookieRequest, allowing for the creation of new products through the flutter app being imported into the db
 11. In flutter lib/widgets/menu_button_cards.dart, I created the logout functionality
-12. I 
+12. I added the product details page
+
+
+**Explain why we need to create a model to retrieve or send JSON data. Will an error occur if we don't create a model first?**
+Creating a model in Django provides a structured way to define and interact with the data, ensuring consistency when storing, retrieving, or processing it. Models also enable easy serialization of data into JSON format, which is important for APIs that communicate with frontends like Flutter. Without a model, an error won’t necessarily occur, but handling the data manually could lead to inefficiencies or bugs due to the lack of benefits of validation, structure, and ORM features that a model provides.
+
+**Explain the function of the http library that you implemented for this task.**
+The http library in Flutter facilitates communication with Django by sending HTTP requests (e.g., GET, POST) to the backend and processing responses (e.g., JSON data). This allows the Flutter app to perform tasks like user authentication, data retrieval, or updates by interacting with Django’s endpoints.
+
+**Explain the function of CookieRequest and why it’s necessary to share the CookieRequest instance with all components in the Flutter app.**
+CookieRequest is responsible for managing cookies, maintaining session data, and ensuring stateful communication between the Flutter app and Django. By sharing a single CookieRequest instance across components, the app ensures consistency in authentication and user state, such as keeping users logged in across different screens. Without a shared instance, maintaining session continuity and managing user-specific data would be difficult.
+
+**Explain the mechanism of data transmission, from input to display in Flutter.**
+When a user inputs data in Flutter (e.g., a form), the app sends the data to the Django backend using the http library. Django processes this data, possibly interacting with its database, and responds with a JSON object. Flutter parses the JSON response and updates the UI using widgets to display the data dynamically. This process ensures real-time or near-real-time updates based on user interactions.
+
+**Explain the authentication mechanism from login, register, to logout. Start from inputting account data in Flutter to Django’s completion of the authentication process and display of the menu in Flutter.**
+In the Flutter app, when a user inputs login or registration details, the app sends the data (via POST request) to Django's endpoints, eg. /login or /register. Django validates the credentials or creates a new user, returning a response with a session cookie or authentication token if successful. This token is stored in CookieRequest for subsequent requests. During logout, the app sends a request to Django’s /logout endpoint, clearing the session. After each authentication step, Flutter updates the UI, such as navigating to the main menu after login or showing a success message after registration.
