@@ -143,3 +143,22 @@ In a multi-page Flutter application, navigation can be managed using Navigator a
 10. I added an import for menu_button_cards.dart into menu.dart
 11. I added the left drawer into the menu.dart page
 12. I tested the application to ensure it worked as expected
+
+# Assignment 9
+**Implementation of Assignment**
+1. I created a new django-app named authentication in my Django project and added it to INSTALLED_APPS
+python manage.py startapp authentication
+2. I ran pip install django-cors-headers and added code to settings.py to use corsheaders in my application
+3. I created the following views in authentication/views.py : login, register, logout and imported them into authentication/urls.py after creating urls.py
+4. I ran the following commands in order to integrate authentication in flutter:
+flutter pub add provider
+flutter pub add pbp_django_auth
+5. I created a login.dart and register.dart screens in my flutter app and connected them to the main.dart page.
+6. I created a flutter model by using the results of the json/ endpoint and Quicktype website
+7. I ran the command below and updated the android/app/src/main/AndroidManifest.xml file to access the internet
+flutter pub add http
+8. I created a new screen in flutter to list out all the product data, and I created a navigation icon for it in the left drawer, as well as connected it to the main page.
+9. I created a views.py function and  url endpoint in my django app for creating a product in flutter.
+10. I connected the flutter product entry to CookieRequest, allowing for the creation of new products through the flutter app being imported into the db
+11. In flutter lib/widgets/menu_button_cards.dart, I created the logout functionality
+12. I 

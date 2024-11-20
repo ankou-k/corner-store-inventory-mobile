@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-// Import the previously created drawer
+import 'package:corner_store_mobile/screens/menu.dart';
 import 'package:corner_store_mobile/widgets/left_drawer.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'dart:convert';
 
 class ProductEntryFormPage extends StatefulWidget {
   const ProductEntryFormPage({super.key});
@@ -13,11 +16,13 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
   final _formKey = GlobalKey<FormState>();
   String _name = "";
   String _description = "";
-  int _amount = 0;
-  double _cost = 0;
+  int _stock = 0;
+  int _price = 0;
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+
     return Scaffold(
         appBar: AppBar(
             title: const Center(
@@ -86,23 +91,23 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       decoration: InputDecoration(
-                        hintText: "Amount",
-                        labelText: "Amount",
+                        hintText: "Stock",
+                        labelText: "Stock",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                       ),
                       onChanged: (String? value) {
                         setState(() {
-                          _amount = int.tryParse(value!) ?? 0;
+                          _stock = int.tryParse(value!) ?? 0;
                         });
                       },
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return "Amount cannot be empty!";
+                          return "Stock cannot be empty!";
                         }
                         if (int.tryParse(value) == null) {
-                          return "Amount must be a number!";
+                          return "Stock must be a number!";
                         }
                         return null;
                       },
@@ -112,23 +117,23 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       decoration: InputDecoration(
-                        hintText: "Cost",
-                        labelText: "Cost",
+                        hintText: "Price",
+                        labelText: "Price",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                       ),
                       onChanged: (String? value) {
                         setState(() {
-                          _cost = double.tryParse(value!) ?? 0;
+                          _price = int.tryParse(value!) ?? 0;
                         });
                       },
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return "Cost cannot be empty!";
+                          return "Price cannot be empty!";
                         }
-                        if (double.tryParse(value) == null) {
-                          return "Cost must be a number!";
+                        if (int.tryParse(value) == null) {
+                          return "Price must be a number!";
                         }
                         return null;
                       },
@@ -143,37 +148,38 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                           backgroundColor: WidgetStateProperty.all(
                               Theme.of(context).colorScheme.primary),
                         ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('Product successfully saved'),
-                                  content: SingleChildScrollView(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Product name: $_name'),
-                                        Text('Description: $_description'),
-                                        Text('Amount: $_amount'),
-                                        Text('Cost: \$ $_cost'),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text('OK'),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        _formKey.currentState!.reset();
-                                      },
-                                    ),
-                                  ],
+                        onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                                // Send request to Django and wait for the response
+                                // TODO: Change the URL to your Django app's URL. Don't forget to add the trailing slash (/) if needed.
+                                final response = await request.postJson(
+                                    "http://localhost:8000/create-flutter/",
+                                    jsonEncode(<String, String>{
+                                        'name': _name,
+                                        'description': _description,
+                                        'stock': _stock.toString(),
+                                        'price': _price.toString(),
+                                    }),
                                 );
-                              },
-                            );
-                          }
+                                if (context.mounted) {
+                                    if (response['status'] == 'success') {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                        content: Text("New product has saved successfully!"),
+                                        ));
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => MyHomePage()),
+                                        );
+                                    } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                            content:
+                                                Text("Something went wrong, please try again."),
+                                        ));
+                                    }
+                                }
+                            }
                         },
                         child: const Text(
                           "Save",
